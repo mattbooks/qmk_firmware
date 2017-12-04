@@ -15,8 +15,7 @@
 #----------------------------------------------------------------------------
 
 # # project specific files
-SRC = twimaster.c \
-	  matrix.c
+SRC = matrix.c twimaster.c
 
 # MCU name
 MCU = atmega32u4

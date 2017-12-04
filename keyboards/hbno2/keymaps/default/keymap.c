@@ -84,8 +84,6 @@ void matrix_init_user(void) {
 
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
-  print("LOOP");
-
 };
 
 // Runs whenever there is a layer state change.

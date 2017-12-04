@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define VENDOR_ID       0xFEED
 #define PRODUCT_ID      0x1307
 #define DEVICE_VER      0x0001
-#define MANUFACTURER    ErgoDox EZ
-#define PRODUCT         ErgoDox EZ
-#define DESCRIPTION     QMK keyboard firmware for Ergodox EZ
+#define MANUFACTURER    Matt Books
+#define PRODUCT         HBNO2
+#define DESCRIPTION     QMK keyboard firmware for HBNO2
 
 /* key matrix size */
 #define MATRIX_ROWS 5

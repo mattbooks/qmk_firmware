@@ -69,11 +69,11 @@ static matrix_row_t matrix[MATRIX_ROWS];
 // already changed in the last DEBOUNCE scans.
 static uint8_t debounce_matrix[MATRIX_ROWS * MATRIX_COLS];
 
-static matrix_row_t read_cols(uint8_t row, uint8_t side);
+/* static matrix_row_t read_cols(uint8_t row, uint8_t side); */
 static void unselect_rows(void);
-static void select_row(uint8_t row);
+/* static void select_row(uint8_t row); */
 
-static uint8_t mcp23018_reset_loop;
+/* static uint8_t mcp23018_reset_loop; */
 
 #ifdef DEBUG_MATRIX_SCAN_RATE
 uint32_t matrix_timer;
@@ -113,10 +113,9 @@ void matrix_init(void)
 {
     // initialize row and col
 
-    print("HELLO!");
+    print("HELLO! matrix init\n");
 
     mcp23018_status = init_mcp23018();
-
 
     unselect_rows();
 
@@ -128,29 +127,29 @@ void matrix_init(void)
         }
     }
 
-#ifdef DEBUG_MATRIX_SCAN_RATE
-    matrix_timer = timer_read32();
-    matrix_scan_count = 0;
-#endif
+/* #ifdef DEBUG_MATRIX_SCAN_RATE */
+/*     matrix_timer = timer_read32(); */
+/*     matrix_scan_count = 0; */
+/* #endif */
 
     matrix_init_quantum();
 
 }
 
 void matrix_power_up(void) {
-    mcp23018_status = init_mcp23018();
+    /* mcp23018_status = init_mcp23018(); */
 
-    unselect_rows();
+    /* unselect_rows(); */
 
     // initialize matrix state: all keys off
     for (uint8_t i=0; i < MATRIX_ROWS; i++) {
         matrix[i] = 0;
     }
 
-#ifdef DEBUG_MATRIX_SCAN_RATE
-    matrix_timer = timer_read32();
-    matrix_scan_count = 0;
-#endif
+/* #ifdef DEBUG_MATRIX_SCAN_RATE */
+    /* matrix_timer = timer_read32(); */
+    /* matrix_scan_count = 0; */
+/* #endif */
 }
 
 // Returns a matrix_row_t whose bits are set if the corresponding key should be
@@ -179,45 +178,63 @@ void debounce_report(matrix_row_t change, uint8_t row) {
 
 uint8_t matrix_scan(void)
 {
-    matrix_print();
+    /* matrix_print(); */
 
-    if (mcp23018_status) { // if there was an error
-        if (++mcp23018_reset_loop == 0) {
-            // since mcp23018_reset_loop is 8 bit - we'll try to reset once in 255 matrix scans
-            // this will be approx bit more frequent than once per second
-            print("trying to reset mcp23018\n");
-            mcp23018_status = init_mcp23018();
-            if (mcp23018_status) {
-                print("left side not responding\n");
-            } else {
-                print("left side attached\n");
-            }
-        }
+    /* uint8_t data = 0; */
+
+    print("Start i2c\n");
+
+    mcp23018_status = i2c_start(I2C_ADDR_READ);
+    if (mcp23018_status) {
+      print("ERR\n");
+      /* goto out; */
     }
+    
+    /* print("Read i2c\n"); */
+    /* data = i2c_readNak(); */
 
-#ifdef DEBUG_MATRIX_SCAN_RATE
-    matrix_scan_count++;
+    /* printf("Data: %x\n", data); */
+/* out: */
+    /* print("Stop i2c\n"); */
+    /* i2c_stop(); */
 
-    uint32_t timer_now = timer_read32();
-    if (TIMER_DIFF_32(timer_now, matrix_timer)>1000) {
-        print("matrix scan frequency: ");
-        pdec(matrix_scan_count);
-        print("\n");
+/*     if (mcp23018_status) { // if there was an error */
+/*         if (++mcp23018_reset_loop == 0) { */
+/*             // since mcp23018_reset_loop is 8 bit - we'll try to reset once in 255 matrix scans */
+/*             // this will be approx bit more frequent than once per second */
+/*             print("trying to reset mcp23018\n"); */
+/*             mcp23018_status = init_mcp23018(); */
+/*             if (mcp23018_status) { */
+/*                 print("left side not responding\n"); */
+/*             } else { */
+/*                 print("left side attached\n"); */
+/*             } */
+/*         } */
+/*     } */
 
-        matrix_timer = timer_now;
-        matrix_scan_count = 0;
-    }
-#endif
+/* #ifdef DEBUG_MATRIX_SCAN_RATE */
+/*     matrix_scan_count++; */
 
-    for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
-        select_row(i);
-        matrix_row_t mask = debounce_mask(i);
-        matrix_row_t cols = (read_cols(i, SIDE_LEFT) & mask) << MATRIX_COLS_RIGHT;
-        cols = cols | (read_cols(i, SIDE_RIGHT) & mask) | (matrix[i] & ~mask);
-        debounce_report(cols ^ matrix[i], i);
-        matrix[i] = cols;
-        unselect_rows();
-    }
+/*     uint32_t timer_now = timer_read32(); */
+/*     if (TIMER_DIFF_32(timer_now, matrix_timer)>1000) { */
+/*         print("matrix scan frequency: "); */
+/*         pdec(matrix_scan_count); */
+/*         print("\n"); */
+
+/*         matrix_timer = timer_now; */
+/*         matrix_scan_count = 0; */
+/*     } */
+/* #endif */
+
+/*     for (uint8_t i = 0; i < MATRIX_ROWS; i++) { */
+/*         select_row(i); */
+/*         matrix_row_t mask = debounce_mask(i); */
+/*         matrix_row_t cols = (read_cols(i, SIDE_LEFT) & mask) << MATRIX_COLS_RIGHT; */
+/*         cols = cols | (read_cols(i, SIDE_RIGHT) & mask) | (matrix[i] & ~mask); */
+/*         debounce_report(cols ^ matrix[i], i); */
+/*         matrix[i] = cols; */
+/*         unselect_rows(); */
+/*     } */
 
     matrix_scan_quantum();
 
@@ -255,24 +272,24 @@ uint8_t matrix_key_count(void)
     return count;
 }
 
-static matrix_row_t read_cols(uint8_t row, uint8_t side)
-{
-    uint8_t mcp_side = side == SIDE_LEFT ? GPIOB : GPIOA;
+/* static matrix_row_t read_cols(uint8_t row, uint8_t side) */
+/* { */
+/*     uint8_t mcp_side = side == SIDE_LEFT ? GPIOB : GPIOA; */
 
-    if (mcp23018_status) { // if there was an error
-        return 0;
-    } else {
-        uint8_t data = 0;
-        mcp23018_status = i2c_start(I2C_ADDR_WRITE);    if (mcp23018_status) goto out;
-        mcp23018_status = i2c_write(mcp_side);          if (mcp23018_status) goto out;
-        mcp23018_status = i2c_start(I2C_ADDR_READ);     if (mcp23018_status) goto out;
-        data = i2c_readNak();
-        data = ~data;
-    out:
-        i2c_stop();
-        return data;
-    }
-}
+/*     if (mcp23018_status) { // if there was an error */
+/*         return 0; */
+/*     } else { */
+/*         uint8_t data = 0; */
+/*         mcp23018_status = i2c_start(I2C_ADDR_WRITE);    if (mcp23018_status) goto out; */
+/*         mcp23018_status = i2c_write(mcp_side);          if (mcp23018_status) goto out; */
+/*         mcp23018_status = i2c_start(I2C_ADDR_READ);     if (mcp23018_status) goto out; */
+/*         data = i2c_readNak(); */
+/*         data = ~data; */
+/*     out: */
+/*         i2c_stop(); */
+/*         return data; */
+/*     } */
+/* } */
 
 static void unselect_rows(void)
 {
@@ -280,9 +297,9 @@ static void unselect_rows(void)
     PORTB &= ~(1<<0 | 1<<1 | 1<<2 | 1<<3 | 1<<4);
 }
 
-static void select_row(uint8_t row)
-{
-    DDRB  |= (1<<row);
-    PORTB &= ~(1<<row);
-}
+/* static void select_row(uint8_t row) */
+/* { */
+/*     DDRB  |= (1<<row); */
+/*     PORTB &= ~(1<<row); */
+/* } */
 
