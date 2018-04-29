@@ -24,8 +24,6 @@
 
 extern uint8_t mcp23018_status;
 
-void init_ergodox(void);
-void ergodox_blink_all_leds(void);
 uint8_t init_mcp23018(void);
 
 #ifndef LED_BRIGHTNESS_LO
@@ -35,24 +33,25 @@ uint8_t init_mcp23018(void);
 #define LED_BRIGHTNESS_HI       255
 #endif
 
+#define MAX_BRIGHTNESS 0x3FF
+#define MIN_BRIGHTNESS 0x0
 
-inline void ergodox_board_led_on(void) {
-  DDRB |=  (1<<5);
-  PORTB |=  (1<<5);
+inline void led_on(void) {
+  OCR1A = MAX_BRIGHTNESS;
+  OCR3A = MAX_BRIGHTNESS;
+  OCR1B = MAX_BRIGHTNESS;
 }
 
-inline void ergodox_board_led_off(void) {
-  PORTB &= ~(1<<6);
+inline void led_off(void) {
+  OCR1A = MIN_BRIGHTNESS;
+  OCR3A = MIN_BRIGHTNESS;
+  OCR1B = MAX_BRIGHTNESS;
 }
 
-inline void ergodox_led_all_on(void)
-{
-    ergodox_board_led_on();
-}
-
-inline void ergodox_led_all_off(void)
-{
-    ergodox_board_led_off();
+inline void led_rgb(uint16_t r, uint16_t g, uint16_t b) {
+  OCR1A = r;
+  OCR3A = g;
+  OCR1B = b;
 }
 
 #define KEYMAP( \
