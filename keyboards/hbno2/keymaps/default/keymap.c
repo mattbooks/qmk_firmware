@@ -29,8 +29,8 @@ uint16_t rgb_b = 0x0;
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [BASE] = KEYMAP(  // layer 0 : default
   // left hand
-  KC_NO,                KC_1,    KC_2,    KC_3,    KC_4,    KC_5,
-  MT(MOD_LGUI, KC_GRV), KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,
+  KC_GRV,               KC_1,    KC_2,    KC_3,    KC_4,    KC_5,
+  MT(MOD_LGUI, KC_TAB), KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,
   CTL_T(KC_ESC),        KC_A,    KC_S,    KC_D,    KC_F,    KC_G,
   MT(MOD_LSFT, KC_NO),  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,
   LT(MDIA, KC_NO),      KC_LOCK, KC_LSFT, KC_LCTL, KC_LALT, LT(SYMB, KC_NO),
