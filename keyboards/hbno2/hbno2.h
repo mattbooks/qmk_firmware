@@ -36,23 +36,17 @@ uint8_t init_mcp23018(void);
 #define MAX_BRIGHTNESS 0x3FF
 #define MIN_BRIGHTNESS 0x0
 
-inline void led_on(void) {
-  OCR1A = MAX_BRIGHTNESS;
-  OCR3A = MAX_BRIGHTNESS;
-  OCR1B = MAX_BRIGHTNESS;
-}
+typedef struct {
+  uint16_t red;
+  uint16_t green;
+  uint16_t blue;
+} led_value_t;
 
-inline void led_off(void) {
-  OCR1A = MIN_BRIGHTNESS;
-  OCR3A = MIN_BRIGHTNESS;
-  OCR1B = MAX_BRIGHTNESS;
-}
-
-inline void led_rgb(uint16_t r, uint16_t g, uint16_t b) {
-  OCR1A = r;
-  OCR3A = g;
-  OCR1B = b;
-}
+inline void change_led(led_value_t val) {
+  OCR1A = val.red;
+  OCR3A = val.green;
+  OCR1B = val.blue;
+};
 
 #define KEYMAP( \
     k00,k05,k10,k15,k20,k25, \

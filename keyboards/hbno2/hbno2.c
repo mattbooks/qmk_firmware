@@ -1,10 +1,6 @@
 #include QMK_KEYBOARD_H
 #include "i2cmaster.h"
 
-
-extern inline void led_on(void);
-extern inline void led_off(void);
-
 bool i2c_initialized = 0;
 uint8_t mcp23018_status = 0x20;
 
@@ -29,8 +25,6 @@ uint8_t init_mcp23018(void) {
     mcp23018_status = 0x20;
 
     // I2C subsystem
-
-    led_on();
 
     // uint8_t sreg_prev;
     // sreg_prev=SREG;
